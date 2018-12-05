@@ -92,53 +92,6 @@
         }
     }
 
-    // Add UDP transport.
-    {
-        // Init transport config structure
-        pjsua_transport_config cfg;
-        pjsua_transport_config_default(&cfg);
-        pjsua_transport_id id;
-
-        // Add TCP transport.
-        status = pjsua_transport_create(PJSIP_TRANSPORT_UDP, &cfg, &id);
-        
-        if (status != PJ_SUCCESS) {
-            NSLog(@"Error creating UDP transport");
-        } else {
-            self.udpTransportId = id;
-        }
-    }
-    
-    // Add TCP transport.
-    {
-        pjsua_transport_config cfg;
-        pjsua_transport_config_default(&cfg);
-        pjsua_transport_id id;
-        
-        status = pjsua_transport_create(PJSIP_TRANSPORT_TCP, &cfg, &id);
-        
-        if (status != PJ_SUCCESS) {
-            NSLog(@"Error creating TCP transport");
-        } else {
-            self.tcpTransportId = id;
-        }
-    }
-    
-    // Add TLS transport.
-    {
-        pjsua_transport_config cfg;
-        pjsua_transport_config_default(&cfg);
-        pjsua_transport_id id;
-        
-        status = pjsua_transport_create(PJSIP_TRANSPORT_TLS, &cfg, &id);
-        
-        if (status != PJ_SUCCESS) {
-            NSLog(@"Error creating TLS transport");
-        } else {
-            self.tlsTransportId = id;
-        }
-    }
-
     // Initialization is done, now start pjsua
     status = pjsua_start();
     if (status != PJ_SUCCESS) NSLog(@"Error starting pjsua");
@@ -164,6 +117,69 @@
         for (NSDictionary *account in accountsResult) {
             int accountId = account[@"_data"][@"id"];
             [[PjSipEndpoint instance] updateStunServers:accountId stunServerList:config[@"service"][@"stun"]];
+        }
+    }
+
+    pj_status_t status;
+    
+    NSString *publicAddress = config[@"service"][@"publicAddress"];
+    
+    // Add UDP transport.
+    {
+        // Init transport config structure
+        pjsua_transport_config cfg;
+        pjsua_transport_config_default(&cfg);
+        pjsua_transport_id id;
+        
+        if (publicAddress) {
+            cfg.public_addr = pj_str((char*)[publicAddress UTF8String]);
+        }
+        
+        // Add TCP transport.
+        status = pjsua_transport_create(PJSIP_TRANSPORT_UDP, &cfg, &id);
+        
+        if (status != PJ_SUCCESS) {
+            NSLog(@"Error creating UDP transport");
+        } else {
+            self.udpTransportId = id;
+        }
+    }
+    
+    // Add TCP transport.
+    {
+        pjsua_transport_config cfg;
+        pjsua_transport_config_default(&cfg);
+        pjsua_transport_id id;
+        
+        if (publicAddress) {
+            cfg.public_addr = pj_str((char*)[publicAddress UTF8String]);
+        }
+        status = pjsua_transport_create(PJSIP_TRANSPORT_TCP, &cfg, &id);
+        
+        
+        if (status != PJ_SUCCESS) {
+            NSLog(@"Error creating TCP transport");
+        } else {
+            self.tcpTransportId = id;
+        }
+    }
+    
+    // Add TLS transport.
+    {
+        pjsua_transport_config cfg;
+        pjsua_transport_config_default(&cfg);
+        pjsua_transport_id id;
+
+        if (publicAddress) {
+            cfg.public_addr = pj_str((char*)[publicAddress UTF8String]);
+        }
+        
+        status = pjsua_transport_create(PJSIP_TRANSPORT_TLS, &cfg, &id);
+        
+        if (status != PJ_SUCCESS) {
+            NSLog(@"Error creating TLS transport");
+        } else {
+            self.tlsTransportId = id;
         }
     }
     
