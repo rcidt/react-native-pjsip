@@ -13,6 +13,7 @@ public class ServiceConfigurationDTO {
 
     public String ua;
     public ArrayList<String> stun;
+    public String publicAddress;
 
     public String getUserAgent() {
         return ua;
@@ -24,6 +25,10 @@ public class ServiceConfigurationDTO {
             serversVector.add(server);
         }
         return serversVector;
+    }
+
+    public String getPublicAddress() {
+        return publicAddress;
     }
 
     public boolean isUserAgentNotEmpty() {
@@ -65,6 +70,10 @@ public class ServiceConfigurationDTO {
 
         if (conf.containsKey("stun")) {
             c.stun = (ArrayList) conf.get("stun");
+        }
+
+        if (conf.containsKey("publicAddress")) {
+            c.publicAddress = conf.get("publicAddress").toString();
         }
 
         return c;

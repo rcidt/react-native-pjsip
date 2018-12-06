@@ -181,22 +181,33 @@ public class PjSipService extends Service {
 
             mTrash.add(epConfig);
 
+            String publicAddress = mServiceConfiguration.getPublicAddress();
+
             // Configure transports
             {
                 TransportConfig transportConfig = new TransportConfig();
                 transportConfig.setQosType(pj_qos_type.PJ_QOS_TYPE_VOICE);
+                if (publicAddress != null) {
+                    transportConfig.setPublicAddress(publicAddress);
+                }
                 mUdpTransportId = mEndpoint.transportCreate(pjsip_transport_type_e.PJSIP_TRANSPORT_UDP, transportConfig);
                 mTrash.add(transportConfig);
             }
             {
                 TransportConfig transportConfig = new TransportConfig();
                 transportConfig.setQosType(pj_qos_type.PJ_QOS_TYPE_VOICE);
+                if (publicAddress != null) {
+                    transportConfig.setPublicAddress(publicAddress);
+                }
                 mTcpTransportId = mEndpoint.transportCreate(pjsip_transport_type_e.PJSIP_TRANSPORT_TCP, transportConfig);
                 mTrash.add(transportConfig);
             }
             {
                 TransportConfig transportConfig = new TransportConfig();
                 transportConfig.setQosType(pj_qos_type.PJ_QOS_TYPE_VOICE);
+                if (publicAddress != null) {
+                    transportConfig.setPublicAddress(publicAddress);
+                }
                 mTlsTransportId = mEndpoint.transportCreate(pjsip_transport_type_e.PJSIP_TRANSPORT_TLS, transportConfig);
                 mTrash.add(transportConfig);
             }
