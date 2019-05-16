@@ -186,6 +186,8 @@ public class PjSipService extends Service {
             // Configure transports
             {
                 TransportConfig transportConfig = new TransportConfig();
+
+                transportConfig.setPort(10000);
                 transportConfig.setQosType(pj_qos_type.PJ_QOS_TYPE_VOICE);
                 if (publicAddress != null) {
                     transportConfig.setPublicAddress(publicAddress);
