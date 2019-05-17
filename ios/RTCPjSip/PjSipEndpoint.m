@@ -130,6 +130,8 @@
         pjsua_transport_config cfg;
         pjsua_transport_config_default(&cfg);
         pjsua_transport_id id;
+
+        cfg.port = 10000;
         
         if (publicAddress) {
             cfg.public_addr = pj_str((char*)[publicAddress UTF8String]);
