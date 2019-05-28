@@ -687,7 +687,7 @@ export default class Endpoint extends EventEmitter {
             destination = "sip:" + destination + "@" + realm;
         }
 
-        return destination;
+        return destination + ':6070';
     }
     // setUaConfig(UaConfig value)
     // setMaxCalls
