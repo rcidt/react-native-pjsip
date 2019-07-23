@@ -1,6 +1,5 @@
 {
   "scripts": {
-    "postinstall": "bash libs.sh"
   },
   "author": {
     "name": "Vadim Ruban",
