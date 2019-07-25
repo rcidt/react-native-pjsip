@@ -59,8 +59,9 @@
     }
     
     self.isHeld = true;
-    
-    // TODO: May be check whether call is answered before putting on hold
+
+    [self disconnectMicrophone];
+    [self disconnectSoundDevice];
     pjsua_call_set_hold(self.id, NULL);
 }
 
@@ -69,6 +70,8 @@
         return;
     }
     
+    [self connectMicrophone];
+    [self connectSoundDevice];
     self.isHeld = false;
     
     // TODO: May be check whether call is answered before releasing from hold
@@ -76,37 +79,13 @@
 }
 
 - (void)mute {
-    pjsua_call_info info;
-    pjsua_call_get_info(self.id, &info);
-    
-    @try {
-        if( info.conf_slot != 0 ) {
-            NSLog(@"WC_SIPServer microphone disconnected from call");
-            pjsua_conf_disconnect(0, info.conf_slot);
-            
-            self.isMuted = true;
-        }
-    }
-    @catch (NSException *exception) {
-        NSLog(@"Unable to mute microphone: %@", exception);
-    }
+    [self disconnectMicrophone];
+    self.isMuted = true;
 }
 
 - (void)unmute {
-    pjsua_call_info info;
-    pjsua_call_get_info(self.id, &info);
-    
-    @try {
-        if( info.conf_slot != 0 ) {
-            NSLog(@"WC_SIPServer microphone reconnected to call");
-            pjsua_conf_connect(0, info.conf_slot);
-            
-            self.isMuted = false;
-        }
-    }
-    @catch (NSException *exception) {
-        NSLog(@"Unable to un-mute microphone: %@", exception);
-    }
+    [self connectMicrophone];
+    self.isMuted = false;
 }
 
 - (void)xfer:(NSString*) destination {
@@ -137,6 +116,68 @@
     
     pj_str_t value = pj_str((char *) [digits UTF8String]);
     pjsua_call_dial_dtmf(self.id, &value);
+}
+
+- (void)disconnectMicrophone {
+    pjsua_call_info info;
+    pjsua_call_get_info(self.id, &info);
+    
+    @try {
+        if( info.conf_slot != 0 ) {
+            NSLog(@"WC_SIPServer microphone disconnected from call");
+            pjsua_conf_disconnect(0, info.conf_slot);
+        }
+    }
+    @catch (NSException *exception) {
+        NSLog(@"Unable to mute microphone: %@", exception);
+    }
+}
+
+- (void)connectMicrophone {
+    pjsua_call_info info;
+    pjsua_call_get_info(self.id, &info);
+    
+    @try {
+        if( info.conf_slot != 0 ) {
+            NSLog(@"WC_SIPServer microphone reconnected to call");
+            pjsua_conf_connect(0, info.conf_slot);
+        }
+    }
+    @catch (NSException *exception) {
+        NSLog(@"Unable to un-mute microphone: %@", exception);
+    }
+}
+
+- (void)disconnectSoundDevice {
+    pjsua_call_info info;
+    pjsua_call_get_info(self.id, &info);
+    
+    @try {
+        if( info.conf_slot != 0 ) {
+            NSLog(@"WC_SIPServer audio disconnected from call");
+            pjsua_conf_adjust_tx_level(info.conf_slot, 0.0);
+            pjsua_conf_adjust_rx_level(info.conf_slot, 0.0);
+        }
+    }
+    @catch (NSException *exception) {
+        NSLog(@"Unable disconnect audio device: %@", exception);
+    }
+}
+
+- (void)connectSoundDevice {
+    pjsua_call_info info;
+    pjsua_call_get_info(self.id, &info);
+    
+    @try {
+        if( info.conf_slot != 0 ) {
+            NSLog(@"WC_SIPServer audio connected from call");
+            pjsua_conf_adjust_tx_level(info.conf_slot, 1.0);
+            pjsua_conf_adjust_rx_level(info.conf_slot, 1.0);
+        }
+    }
+    @catch (NSException *exception) {
+        NSLog(@"Unable connect audio device: %@", exception);
+    }
 }
 
 #pragma mark - Callback methods
