@@ -36,7 +36,6 @@
     pjsua_call_hangup(self.id, PJSIP_SC_DECLINE, NULL, NULL);
 }
 
-
 - (void)answer {
     // TODO: Add parameters to answer with
     // TODO: Put on hold previous call

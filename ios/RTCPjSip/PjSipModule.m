@@ -220,6 +220,12 @@ RCT_EXPORT_METHOD(dtmfCall: (int) callId digits: (NSString *) digits callback:(R
     }
 }
 
+RCT_EXPORT_METHOD(handleIpChange:(RCTResponseSenderBlock) callback) {
+    PjSipEndpoint* endpoint = [PjSipEndpoint instance];
+    [endpoint handleIpChange];
+    callback(@[@TRUE]);
+}
+
 RCT_EXPORT_METHOD(useSpeaker: (int) callId callback:(RCTResponseSenderBlock) callback) {
     [[PjSipEndpoint instance] useSpeaker];
 }

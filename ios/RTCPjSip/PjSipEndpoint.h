@@ -39,5 +39,6 @@
 -(void)emmitCallUpdated:(PjSipCall*) call;
 -(void)emmitCallChanged:(PjSipCall*) call;
 -(void)emmitCallTerminated:(PjSipCall*) call;
+- (void)handleIpChange;
 
 @end

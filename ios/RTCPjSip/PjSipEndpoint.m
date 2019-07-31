@@ -296,6 +296,12 @@
     }
 }
 
+- (void)handleIpChange
+{
+    pjsua_ip_change_param prm;
+    pjsua_handle_ip_change(&prm);
+}
+
 #pragma mark - Settings
 
 -(void) changeOrientation: (NSString*) orientation {
