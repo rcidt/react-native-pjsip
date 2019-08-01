@@ -6,6 +6,8 @@
 #import <React/RCTUtils.h>
 #import <VialerPJSIP/pjsua.h>
 
+#import <sys/utsname.h>
+
 #import "PjSipUtil.h"
 #import "PjSipEndpoint.h"
 #import "PjSipMessage.h"
@@ -84,6 +86,13 @@
         pjsua_media_config_default(&mediaConfig);
         mediaConfig.clock_rate = PJSUA_DEFAULT_CLOCK_RATE;
         mediaConfig.snd_clock_rate = 0;
+        
+        NSString *version = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+        NSString *build = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
+        float osVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
+        NSString *model = [self deviceId];
+        NSString *ua = [NSString stringWithFormat:@"com.net2phone.unite/%@.%@ (iOS %f; Apple %@)", version, build, osVersion, model];
+        cfg.user_agent = pj_str((char*)[ua UTF8String]);
         
         // Init the pjsua
         status = pjsua_init(&cfg, &log_cfg, &mediaConfig);
@@ -461,6 +470,17 @@ static void onMessageReceived(pjsua_call_id call_id, const pj_str_t *from,
     PjSipMessage* message = [PjSipMessage itemConfig:data];
     
     [endpoint emmitMessageReceived:message];
+
+}
+
+
+- (NSString*) deviceId
+{
+    struct utsname systemInfo;
+    uname(&systemInfo);
+    NSString* deviceId = [NSString stringWithCString:systemInfo.machine
+                                            encoding:NSUTF8StringEncoding];
+    return deviceId;
 }
 
 @end
