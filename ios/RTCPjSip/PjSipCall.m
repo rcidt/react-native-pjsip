@@ -75,6 +75,10 @@
     
     // TODO: May be check whether call is answered before releasing from hold
     pjsua_call_reinvite(self.id, PJSUA_CALL_UNHOLD, NULL);
+    
+    if (self.isMuted) {
+        [self disconnectMicrophone];
+    }
 }
 
 - (void)mute {
