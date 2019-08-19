@@ -71,10 +71,11 @@
     
     [self connectMicrophone];
     [self connectSoundDevice];
-    self.isHeld = false;
     
     // TODO: May be check whether call is answered before releasing from hold
     pjsua_call_reinvite(self.id, PJSUA_CALL_UNHOLD, NULL);
+    
+    self.isHeld = false;
     
     if (self.isMuted) {
         [self disconnectMicrophone];
