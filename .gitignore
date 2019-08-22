@@ -4,3 +4,4 @@ android/build
 node_modules
 android/src/main/jniLibs/
 ios/RTCPjSip.xcodeproj/xcuserdata/
+ios/VialerPJSIP.framework/VialerPJSIP
