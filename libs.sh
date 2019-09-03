@@ -11,5 +11,5 @@ if ! type "tar" > /dev/null; then
 fi
 
 curl -LO https://github.com/liveninja/react-native-pjsip/releases/download/1.0.0/VialerPJSIP.zip
-unzip VialerPJSIP.zip -d ios/VialerPJSIP.framework
-rm -rf VialerPJSIP.zip android
+unzip VialerPJSIP.zip -d ios/VialerPJSIP.framework || true
+rm -rf VialerPJSIP.zip android || true
