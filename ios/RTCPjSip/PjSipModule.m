@@ -72,7 +72,6 @@ RCT_EXPORT_METHOD(makeCall: (int) accountId destination: (NSString *) destinatio
         
         // TODO: Remove this function
         // Automatically put other calls on hold.
-        [endpoint pauseParallelCalls:call];
         
         callback(@[@TRUE, [call toJsonDictionary:endpoint.isSpeaker]]);
     }
@@ -111,7 +110,6 @@ RCT_EXPORT_METHOD(answerCall: (int) callId callback:(RCTResponseSenderBlock) cal
         [call answer];
         
         // Automatically put other calls on hold.
-        [endpoint pauseParallelCalls:call];
         
         callback(@[@TRUE]);
     } else {
@@ -142,7 +140,6 @@ RCT_EXPORT_METHOD(unholdCall: (int) callId callback:(RCTResponseSenderBlock) cal
         [endpoint emmitCallChanged:call];
         
         // Automatically put other calls on hold.
-        [endpoint pauseParallelCalls:call];
         
         callback(@[@TRUE]);
     } else {
