@@ -6,15 +6,20 @@
 
 @implementation PjSipCall
 
-+ (instancetype)itemConfig:(int)id {
-    return [[self alloc] initWithId:id];
++ (instancetype)itemConfig:(int)id callSetupId:(NSString*)callSetupId {
+    return [[self alloc] initWithId:id callSetupId:callSetupId];
 }
 
-- (id)initWithId:(int)id {
++ (instancetype)itemConfig:(int)id{
+    return [[self alloc] initWithId:id callSetupId:@""];
+}
+
+- (id)initWithId:(int)id callSetupId:(NSString*)callSetupId {
     self = [super init];
     
     if (self) {
         self.id = id;
+        self.callSetupId = callSetupId;
         self.isHeld = false;
         self.isMuted = false;
     }
@@ -208,7 +213,7 @@
 - (NSDictionary *)toJsonDictionary:(bool) isSpeaker {
     pjsua_call_info info;
     pjsua_call_get_info(self.id, &info);
-
+    
     // -----
     int connectDuration = -1;
     
@@ -221,6 +226,7 @@
         @"id": @(self.id),
         @"callId": [PjSipUtil toString:&info.call_id],
         @"accountId": @(info.acc_id),
+        @"callSetupId": self.callSetupId,
         
         @"localContact": [PjSipUtil toString:&info.local_contact],
         @"localUri": [PjSipUtil toString:&info.local_info],

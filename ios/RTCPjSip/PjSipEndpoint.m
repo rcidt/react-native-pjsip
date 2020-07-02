@@ -384,7 +384,14 @@ static void onRegStateChanged(pjsua_acc_id accId) {
 static void onCallReceived(pjsua_acc_id accId, pjsua_call_id callId, pjsip_rx_data *rx) {
     PjSipEndpoint* endpoint = [PjSipEndpoint instance];
     
-    PjSipCall *call = [PjSipCall itemConfig:callId];
+    pjsip_msg msg = *rx->msg_info.msg;
+    pj_str_t headerName;
+    headerName = pj_str("P-Idt-WebRTC");
+    pjsip_generic_string_hdr *header = pjsip_msg_find_hdr_by_name(&msg, &headerName, nil);
+    pj_str_t headerValue = header->hvalue;
+    NSString *callSetupId = [PjSipUtil toString:&headerValue];
+    
+    PjSipCall *call = [PjSipCall itemConfig:callId callSetupId:callSetupId];
     endpoint.calls[@(callId)] = call;
     
     [endpoint emmitCallReceived:call];

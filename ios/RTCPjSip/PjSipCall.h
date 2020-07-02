@@ -6,7 +6,9 @@
 @property int id;
 @property bool isHeld;
 @property bool isMuted;
+@property NSString* callSetupId;
 
++ (instancetype)itemConfig:(int)id callSetupId:(NSString*)callSetupId;
 + (instancetype)itemConfig:(int)id;
 
 - (void)hangup;
