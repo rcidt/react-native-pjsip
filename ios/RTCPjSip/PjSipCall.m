@@ -52,7 +52,7 @@
     
     // TODO: Audio/Video count configuration!
     callOpt.aud_cnt = 1;
-    callOpt.vid_cnt = 1;
+    callOpt.vid_cnt = 0;
     
     pjsua_call_answer2(self.id, &callOpt, 200, NULL, &msgData);
 }
