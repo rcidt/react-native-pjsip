@@ -117,6 +117,9 @@
             }
         }
         
+        // Fixes https://idtjira.atlassian.net/browse/MOB-2934
+        cfg.allow_sdp_nat_rewrite = PJ_TRUE;
+
         pjsua_acc_id account_id;
 
         status = pjsua_acc_add(&cfg, PJ_TRUE, &account_id);
