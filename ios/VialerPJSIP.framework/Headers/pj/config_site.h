@@ -7,3 +7,5 @@
 #define PJMEDIA_HAS_OPUS_CODEC 0
 #include <VialerPJSIP/pj/config_site_sample.h>
 #define PJMEDIA_HAS_ILBC_CODEC 0
+#define PJMEDIA_HAS_RTCP_XR 1
+#define PJMEDIA_STREAM_ENABLE_XR 1
