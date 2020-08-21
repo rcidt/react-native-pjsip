@@ -61,6 +61,10 @@ export default class Endpoint extends EventEmitter {
         DeviceEventEmitter.addListener('pjSipConnectivityChanged', this._onConnectivityChanged.bind(this));
     }
 
+    dump(call, withMedia, indent) {
+            return NativeModules.PjSipModule.dump(call.getId(), withMedia?"YES":"NO", indent);
+    }
+
     /**
      * Returns a Promise that will be resolved once PjSip module is initialized.
      * Do not call any function while library is not initialized.

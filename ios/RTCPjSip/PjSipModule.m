@@ -247,6 +247,13 @@ RCT_EXPORT_METHOD(deactivateAudioSession: (RCTResponseSenderBlock) callback) {
     pjsua_set_no_snd_dev();
 }
 
+RCT_EXPORT_METHOD(dump: (int) callId withMedia:(NSString*) withMedia indent:(NSString*) indent resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
+    PjSipEndpoint* endpoint = [PjSipEndpoint instance];
+    PjSipCall *call = [endpoint findCall:callId];
+    NSString* dump = [call dump:[withMedia boolValue] indent:*[indent UTF8String]];
+    resolve(dump);
+}
+
 #pragma mark - Settings
 
 RCT_EXPORT_METHOD(changeOrientation: (NSString*) orientation) {
@@ -261,3 +268,4 @@ RCT_EXPORT_METHOD(changeCodecSettings: (NSDictionary*) codecSettings callback:(R
 RCT_EXPORT_MODULE();
 
 @end
+

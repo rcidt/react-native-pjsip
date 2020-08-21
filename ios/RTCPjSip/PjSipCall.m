@@ -29,6 +29,12 @@
 
 #pragma mark - Actions
 
+- (NSString*) dump: (pj_bool_t) withMedia indent:(char) indent {
+    static char buffer[1024*3];
+    pjsua_call_dump(self.id, withMedia, buffer, sizeof(buffer), &indent);
+    return [NSString stringWithUTF8String:buffer];
+}
+
 - (void) hangup {
     pj_status_t status = pjsua_call_hangup(self.id, 0, NULL, NULL);
     
