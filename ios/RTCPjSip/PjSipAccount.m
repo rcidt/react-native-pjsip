@@ -93,6 +93,12 @@
             if (self.regTimeout != nil && ![self.regTimeout isKindOfClass:[NSNull class]]) {
                 cfg.reg_timeout = (unsigned) [self.regTimeout intValue];
             }
+            
+            cfg.reg_timeout = 60;
+            cfg.reg_first_retry_interval = 3;
+            cfg.reg_retry_interval = 10;
+            cfg.reg_retry_random_interval = 7;
+            cfg.reg_delay_before_refresh = 45;
 
             cfg.register_on_acc_add = self.regOnAdd;
         }
@@ -187,3 +193,4 @@
 }
 
 @end
+
