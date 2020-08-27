@@ -248,9 +248,9 @@ RCT_EXPORT_METHOD(deactivateAudioSession: (RCTResponseSenderBlock) callback) {
 }
 
 RCT_EXPORT_METHOD(dump: (int) callId withMedia:(NSString*) withMedia indent:(NSString*) indent resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
-    PjSipEndpoint* endpoint = [PjSipEndpoint instance];
-    PjSipCall *call = [endpoint findCall:callId];
-    NSString* dump = [call dump:[withMedia boolValue] indent:*[indent UTF8String]];
+    char buffer[1024*3];
+    pjsua_call_dump(callId, (pj_bool_t)withMedia, buffer, sizeof(buffer), [indent UTF8String]);
+    NSString* dump = [[NSString alloc] initWithCString:buffer encoding:NSUTF8StringEncoding];
     resolve(dump);
 }
 

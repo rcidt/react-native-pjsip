@@ -11,7 +11,6 @@
 + (instancetype)itemConfig:(int)id callSetupId:(NSString*)callSetupId;
 + (instancetype)itemConfig:(int)id;
 
-- (NSString*)dump:(pj_bool_t) withMedia indent:(char) indent;
 - (void)hangup;
 - (void)decline;
 - (void)answer;
