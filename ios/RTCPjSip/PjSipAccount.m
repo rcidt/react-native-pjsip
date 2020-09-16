@@ -125,6 +125,7 @@
         
         // Fixes https://idtjira.atlassian.net/browse/MOB-2934
         cfg.allow_sdp_nat_rewrite = PJ_TRUE;
+        cfg.allow_via_rewrite = PJ_FALSE;
 
         pjsua_acc_id account_id;
 
