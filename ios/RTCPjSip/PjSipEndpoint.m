@@ -79,7 +79,10 @@
         // Init the logging config structure
         pjsua_logging_config log_cfg;
         pjsua_logging_config_default(&log_cfg);
+        log_cfg.level = 10;
+        log_cfg.msg_logging = 10;
         log_cfg.console_level = 10;
+        log_cfg.cb = callback;
 
         // Init media config
         pjsua_media_config mediaConfig;
@@ -107,6 +110,11 @@
     if (status != PJ_SUCCESS) NSLog(@"Error starting pjsua");
 
     return self;
+}
+
+void callback(int level, const char* message, int len) {
+    NSString *log = [NSString stringWithFormat:@"%s", message];
+    NSLog(@"%@", log);
 }
 
 - (NSDictionary *)start: (NSDictionary *)config {
