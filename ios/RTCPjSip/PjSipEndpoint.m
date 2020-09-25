@@ -432,7 +432,8 @@ static void onCallMediaStateChanged(pjsua_call_id callId) {
         [call onMediaStateChanged:callInfo];
     }
     
-    [endpoint emmitCallChanged:call];
+    // This line was causing MOB-3026
+    // [endpoint emmitCallChanged:call];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"PjSipInvalidateVideo"
                                                         object:nil];
