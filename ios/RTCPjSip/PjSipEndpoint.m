@@ -79,7 +79,10 @@
         // Init the logging config structure
         pjsua_logging_config log_cfg;
         pjsua_logging_config_default(&log_cfg);
-        log_cfg.console_level = 10;
+        log_cfg.msg_logging = 0;
+        log_cfg.level = 0;
+        log_cfg.console_level = 0;
+        log_cfg.cb = callback;
 
         // Init media config
         pjsua_media_config mediaConfig;
@@ -107,6 +110,10 @@
     if (status != PJ_SUCCESS) NSLog(@"Error starting pjsua");
 
     return self;
+}
+
+void callback(int a, const char* b, int c) {
+    NSLog(@"PJSIP_LOG: %s", b);
 }
 
 - (NSDictionary *)start: (NSDictionary *)config {
@@ -422,7 +429,7 @@ static void onCallStateChanged(pjsua_call_id callId, pjsip_event *event) {
 
 static void onCallMediaStateChanged(pjsua_call_id callId) {
     PjSipEndpoint* endpoint = [PjSipEndpoint instance];
-    
+    [NSThread sleepForTimeInterval:0.5f];
     pjsua_call_info callInfo;
     pjsua_call_get_info(callId, &callInfo);
     
@@ -433,7 +440,7 @@ static void onCallMediaStateChanged(pjsua_call_id callId) {
     }
     
     // This line was causing MOB-3026
-    // [endpoint emmitCallChanged:call];
+    [endpoint emmitCallChanged:call];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"PjSipInvalidateVideo"
                                                         object:nil];
@@ -459,6 +466,7 @@ static void onCallMediaEvent(pjsua_call_id call_id,
             pjsua_vid_win_set_size(wid, &size);
         }
     }
+    
 }
 
 static void onMessageReceived(pjsua_call_id call_id, const pj_str_t *from,
