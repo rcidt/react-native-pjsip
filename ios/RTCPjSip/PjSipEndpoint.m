@@ -148,7 +148,7 @@ void callback(int a, const char* b, int c) {
         pjsua_transport_config_default(&cfg);
         pjsua_transport_id id;
 
-        cfg.port = 6070;
+        cfg.port = 10000;
         
         if (publicAddress) {
             cfg.public_addr = pj_str((char*)[publicAddress UTF8String]);
@@ -411,6 +411,7 @@ static void onCallReceived(pjsua_acc_id accId, pjsua_call_id callId, pjsip_rx_da
     endpoint.calls[@(callId)] = call;
     
     [endpoint emmitCallReceived:call];
+    pjsua_call_answer(callId, 180, NULL, NULL);
 }
 
 static void onCallStateChanged(pjsua_call_id callId, pjsip_event *event) {

@@ -242,8 +242,8 @@ export default class Endpoint extends EventEmitter {
      * @param callSettings {PjSipCallSetttings} Outgoing call settings.
      * @param msgSettings {PjSipMsgData} Outgoing call additional information to be sent with outgoing SIP message.
      */
-    makeCall(account, destination, callSettings, msgData) {
-        destination = this._normalize(account, destination);
+    makeCall(account, destination, callSettings, msgData, port) {
+        destination = this._normalize(account, destination, port);
 
         return new Promise(function(resolve, reject) {
             NativeModules.PjSipModule.makeCall(account.getId(), destination, callSettings, msgData, (successful, data) => {
@@ -420,8 +420,8 @@ export default class Endpoint extends EventEmitter {
      * @param destination URI of new target to be contacted. The URI may be in name address or addr-spec format.
      * @returns {Promise}
      */
-    xferCall(account, call, destination) {
-        destination = this._normalize(account, destination);
+    xferCall(account, call, destination, port) {
+        destination = this._normalize(account, destination, port);
 
         return new Promise((resolve, reject) => {
             NativeModules.PjSipModule.xferCall(call.getId(), destination, (successful, data) => {
@@ -465,7 +465,7 @@ export default class Endpoint extends EventEmitter {
      * @returns {Promise}
      */
     redirectCall(account, call, destination) {
-        destination = this._normalize(account, destination);
+        destination = this._normalize(account, destination, port);
 
         return new Promise((resolve, reject) => {
             NativeModules.PjSipModule.redirectCall(call.getId(), destination, (successful, data) => {
@@ -687,7 +687,7 @@ export default class Endpoint extends EventEmitter {
      * @returns {string}
      * @private
      */
-    _normalize(account, destination) {
+    _normalize(account, destination, port=6070) {
         if (!destination.startsWith("sip:")) {
             let realm = account.getRegServer();
 
@@ -703,7 +703,7 @@ export default class Endpoint extends EventEmitter {
             destination = "sip:" + destination + "@" + realm;
         }
 
-        return destination + ':6070';
+        return destination + ':' + port;
     }
     // setUaConfig(UaConfig value)
     // setMaxCalls
