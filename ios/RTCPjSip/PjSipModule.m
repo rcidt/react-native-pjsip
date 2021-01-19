@@ -119,6 +119,20 @@ RCT_EXPORT_METHOD(answerCall: (int) callId callback:(RCTResponseSenderBlock) cal
     }
 }
 
+RCT_EXPORT_METHOD(reInviteCall: (int) callId callback:(RCTResponseSenderBlock) callback) {
+    PjSipEndpoint* endpoint = [PjSipEndpoint instance];
+    PjSipCall *call = [endpoint findCall:callId];
+    
+    if (call) {
+        [call reInvite];
+        [endpoint emmitCallChanged:call];
+        
+        callback(@[@TRUE]);
+    } else {
+        callback(@[@FALSE, @"Call not found"]);
+    }
+}
+
 RCT_EXPORT_METHOD(holdCall: (int) callId callback:(RCTResponseSenderBlock) callback) {
     PjSipEndpoint* endpoint = [PjSipEndpoint instance];
     PjSipCall *call = [endpoint findCall:callId];
