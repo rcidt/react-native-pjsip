@@ -87,7 +87,9 @@ export default class Call {
 
     getCallSetupId() {
         try {
-            return this._callSetupId.split('=')[1] || this._callSetupId;
+            const values = this._callSetupId.toLowerCase().split(';')
+            const value = values.find(v => v.startsWith('callsetupid'))
+            return value.split('=')[1] || value
         } catch(e) {
             return this._callSetupId
         }
