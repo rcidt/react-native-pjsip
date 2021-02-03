@@ -49,6 +49,7 @@
         cfg.cb.on_call_state = &onCallStateChanged;
         cfg.cb.on_call_media_state = &onCallMediaStateChanged;
         cfg.cb.on_call_media_event = &onCallMediaEvent;
+        cfg.cb.on_call_transfer_status = &onCallTransferStatus;
         
         cfg.cb.on_pager2 = &onMessageReceived;
         
@@ -363,6 +364,15 @@ void callback(int a, const char* b, int c) {
     [self emmitEvent:@"pjSipMessageReceived" body:[message toJsonDictionary]];
 }
 
+-(void)emmitCallTransferStatus:(PjSipCall*) call status:(NSString*)status isFinal:(BOOL)isFinal {
+    NSDictionary* body = @{
+        @"call": [call toJsonDictionary:self.isSpeaker],
+        @"status": status,
+        @"isFinal": @(isFinal)
+    };
+    [self emmitEvent:@"pjSipCallTransferStatus" body:body];
+}
+
 -(void)emmitEvent:(NSString*) name body:(id)body {
     [[self.bridge eventDispatcher] sendAppEventWithName:name body:body];
 }
@@ -479,6 +489,18 @@ static void onMessageReceived(pjsua_call_id call_id, const pj_str_t *from,
     
     [endpoint emmitMessageReceived:message];
 
+}
+
+static void onCallTransferStatus(pjsua_call_id callId, int code, const pj_str_t* text, pj_bool_t isFinal, pj_bool_t* cont) {
+    PjSipEndpoint* endpoint = [PjSipEndpoint instance];
+    pjsua_call_info callInfo;
+    pjsua_call_get_info(callId, &callInfo);
+    
+    PjSipCall* call = [endpoint findCall:callId];
+    
+    if (call) {
+        [endpoint emmitCallTransferStatus:call status:@(text->ptr) isFinal:isFinal];
+    }
 }
 
 

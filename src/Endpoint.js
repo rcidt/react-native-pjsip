@@ -59,6 +59,7 @@ export default class Endpoint extends EventEmitter {
         DeviceEventEmitter.addListener('pjSipCallScreenLocked', this._onCallScreenLocked.bind(this));
         DeviceEventEmitter.addListener('pjSipMessageReceived', this._onMessageReceived.bind(this));
         DeviceEventEmitter.addListener('pjSipConnectivityChanged', this._onConnectivityChanged.bind(this));
+        DeviceEventEmitter.addListener('pjSipCallTransferStatus', this._onCallTransferStatus.bind(this));
     }
 
     dump(call, withMedia, indent) {
@@ -574,6 +575,10 @@ export default class Endpoint extends EventEmitter {
          * @property {Account} account
          */
         this.emit("connectivity_changed", new Account(data));
+    }
+
+    _onCallTransferStatus(data) {
+        this.emit("call_transfer_status", { call: new Call(data.call), ...data })
     }
 
     /**

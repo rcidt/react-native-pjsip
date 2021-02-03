@@ -39,6 +39,7 @@
 -(void)emmitCallUpdated:(PjSipCall*) call;
 -(void)emmitCallChanged:(PjSipCall*) call;
 -(void)emmitCallTerminated:(PjSipCall*) call;
+-(void)emmitCallTransferStatus:(PjSipCall*) call status:(NSString*)status isFinal:(BOOL)isFinal;
 - (void)handleIpChange;
 
 @end
