@@ -14,6 +14,7 @@
 - (void)hangup;
 - (void)decline;
 - (void)answer;
+- (void)reInvite;
 - (void)hold;
 - (void)unhold;
 - (void)mute;

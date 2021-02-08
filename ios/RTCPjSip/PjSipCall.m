@@ -57,6 +57,10 @@
     pjsua_call_answer2(self.id, &callOpt, 200, NULL, &msgData);
 }
 
+- (void)reInvite {
+    pjsua_call_reinvite(self.id, PJSUA_CALL_REINIT_MEDIA | PJSUA_CALL_UPDATE_CONTACT | PJSUA_CALL_UPDATE_VIA, NULL);
+}
+
 - (void)hold {
     if (self.isHeld) {
         return;

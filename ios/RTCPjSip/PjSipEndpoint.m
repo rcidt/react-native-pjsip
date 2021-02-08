@@ -280,7 +280,15 @@ void callback(int a, const char* b, int c) {
             for (NSString *key in self.calls) {
                 PjSipCall *parallelCall = self.calls[key];
                 
-                if (call.id != parallelCall.id && !parallelCall.isHeld) {
+                bool isDistinctCall;
+                
+                if ([call.callSetupId length] > 0) {
+                    isDistinctCall = ![call.callSetupId isEqualToString:parallelCall.callSetupId];
+                } else {
+                    isDistinctCall = call.id != parallelCall.id;
+                }
+                
+                if (isDistinctCall && !parallelCall.isHeld) {
                     [parallelCall hold];
                     [self emmitCallChanged:parallelCall];
                 }
