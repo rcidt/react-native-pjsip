@@ -312,6 +312,18 @@ export default class Endpoint extends EventEmitter {
         });
     }
 
+    reInviteCall(call) {
+        return new Promise((resolve, reject) => {
+            NativeModules.PjSipModule.reInviteCall(call.getId(), (successful, data) => {
+                if (successful) {
+                    resolve(data);
+                } else {
+                    reject(data);
+                }
+            });
+        });
+    }
+
     /**
      * Put the specified call on hold. This will send re-INVITE with the appropriate SDP to inform remote that the call is being put on hold.
      *
