@@ -38,7 +38,7 @@
 }
 
 - (void) decline {
-    pjsua_call_hangup(self.id, PJSIP_SC_DECLINE, NULL, NULL);
+    pjsua_call_hangup(self.id, PJSIP_SC_BUSY_HERE, NULL, NULL);
 }
 
 - (void)answer {
