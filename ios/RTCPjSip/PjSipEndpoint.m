@@ -5,7 +5,7 @@
 #import <React/RCTEventDispatcher.h>
 #import <React/RCTUtils.h>
 #import <VialerPJSIP/pjsua.h>
-
+#import <VialerPJSIP/pjsip/sip_config.h>
 #import <sys/utsname.h>
 
 #import "PjSipUtil.h"
@@ -20,7 +20,7 @@
     dispatch_once(&onceToken, ^{
         sharedInstance = [[PjSipEndpoint alloc] init];
     });
-
+    
     return sharedInstance;
 }
 
@@ -31,12 +31,15 @@
 
     pj_status_t status;
 
+
     // Create pjsua first
     status = pjsua_create();
     if (status != PJ_SUCCESS) {
         NSLog(@"Error in pjsua_create()");
     }
     
+    pjsip_cfg()->endpt.disable_tcp_switch = PJ_TRUE;
+
     // Init pjsua
     {
         // Init the config structure
@@ -79,7 +82,7 @@
         float osVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
         NSString *model = [self deviceId];
         NSString *ua = [NSString stringWithFormat:@"com.net2phone.unite/%@.%@ (iOS %f; Apple %@)", version, build, osVersion, model];
-        cfg.user_agent = pj_str((char*)[ua UTF8String]);
+        //cfg.user_agent = pj_str((char*)[ua UTF8String]);
         
         // Init the pjsua
         status = pjsua_init(&cfg, &log_cfg, &mediaConfig);
