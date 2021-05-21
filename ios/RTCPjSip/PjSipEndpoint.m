@@ -38,7 +38,7 @@
         NSLog(@"Error in pjsua_create()");
     }
     
-    pjsip_cfg()->endpt.disable_tcp_switch = PJ_TRUE;
+    pjsip_cfg()->endpt.disable_tcp_switch = PJ_FALSE;
 
     // Init pjsua
     {
@@ -81,8 +81,8 @@
         NSString *build = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
         float osVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
         NSString *model = [self deviceId];
-        NSString *ua = [NSString stringWithFormat:@"com.net2phone.unite/%@.%@ (iOS %f; Apple %@)", version, build, osVersion, model];
-        //cfg.user_agent = pj_str((char*)[ua UTF8String]);
+        NSString *ua = [NSString stringWithFormat:@"%@ iOS:%f", build, osVersion];
+        cfg.user_agent = pj_str((char*)[ua UTF8String]);
         
         // Init the pjsua
         status = pjsua_init(&cfg, &log_cfg, &mediaConfig);
@@ -156,6 +156,8 @@ void callback(int a, const char* b, int c) {
         pjsua_transport_config_default(&cfg);
         pjsua_transport_id id;
         
+        cfg.port = 10000;
+        
         if (publicAddress) {
             cfg.public_addr = pj_str((char*)[publicAddress UTF8String]);
         }
@@ -174,6 +176,8 @@ void callback(int a, const char* b, int c) {
         pjsua_transport_config cfg;
         pjsua_transport_config_default(&cfg);
         pjsua_transport_id id;
+        
+        cfg.port = 10000;
 
         if (publicAddress) {
             cfg.public_addr = pj_str((char*)[publicAddress UTF8String]);
