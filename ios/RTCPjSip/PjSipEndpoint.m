@@ -257,29 +257,6 @@ void callback(int a, const char* b, int c) {
     return self.calls[@(callId)];
 }
 
--(void) pauseParallelCalls:(PjSipCall*) call {
-    for(id key in self.calls) {
-        if (key != call.id) {
-            for (NSString *key in self.calls) {
-                PjSipCall *parallelCall = self.calls[key];
-                
-                bool isDistinctCall;
-                
-                if ([call.callSetupId length] > 0) {
-                    isDistinctCall = ![call.callSetupId isEqualToString:parallelCall.callSetupId];
-                } else {
-                    isDistinctCall = call.id != parallelCall.id;
-                }
-                
-                if (isDistinctCall && !parallelCall.isHeld) {
-                    [parallelCall hold];
-                    [self emmitCallChanged:parallelCall];
-                }
-            }
-        }
-    }
-}
-
 -(void)useSpeaker {
     self.isSpeaker = true;
     
