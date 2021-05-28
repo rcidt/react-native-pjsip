@@ -42,6 +42,7 @@
 }
 
 - (void)answer {
+    PJ_USE_EXCEPTION;
     // TODO: Add parameters to answer with
     // TODO: Put on hold previous call
     
@@ -54,7 +55,12 @@
     callOpt.aud_cnt = 1;
     callOpt.vid_cnt = 0;
     
-    pjsua_call_answer2(self.id, &callOpt, 200, NULL, &msgData);
+    PJ_TRY {
+        pjsua_call_answer2(self.id, &callOpt, 200, NULL, &msgData);
+    } PJ_CATCH_ANY {
+        NSLog(@"Unable to mute microphone: %d", PJ_GET_EXCEPTION());
+    }
+    PJ_END;
 }
 
 - (void)reInvite {
@@ -147,18 +153,20 @@
 }
 
 - (void)connectMicrophone {
+    PJ_USE_EXCEPTION;
     pjsua_call_info info;
     pjsua_call_get_info(self.id, &info);
     
-    @try {
+    PJ_TRY {
         if( info.conf_slot != 0 ) {
             NSLog(@"WC_SIPServer microphone reconnected to call");
             pjsua_conf_connect(0, info.conf_slot);
         }
     }
-    @catch (NSException *exception) {
-        NSLog(@"Unable to un-mute microphone: %@", exception);
+    PJ_CATCH_ANY {
+        NSLog(@"Unable to un-mute microphone: %d", PJ_GET_EXCEPTION());
     }
+    PJ_END;
 }
 
 - (void)disconnectSoundDevice {

@@ -264,29 +264,6 @@ void callback(int a, const char* b, int c) {
     return self.calls[@(callId)];
 }
 
--(void) pauseParallelCalls:(PjSipCall*) call {
-    for(id key in self.calls) {
-        if (key != call.id) {
-            for (NSString *key in self.calls) {
-                PjSipCall *parallelCall = self.calls[key];
-                
-                bool isDistinctCall;
-                
-                if ([call.callSetupId length] > 0) {
-                    isDistinctCall = ![call.callSetupId isEqualToString:parallelCall.callSetupId];
-                } else {
-                    isDistinctCall = call.id != parallelCall.id;
-                }
-                
-                if (isDistinctCall && !parallelCall.isHeld) {
-                    [parallelCall hold];
-                    [self emmitCallChanged:parallelCall];
-                }
-            }
-        }
-    }
-}
-
 -(void)useSpeaker {
     self.isSpeaker = true;
     
@@ -399,10 +376,9 @@ static void onRegStateChanged(pjsua_acc_id accId) {
 static void onCallReceived(pjsua_acc_id accId, pjsua_call_id callId, pjsip_rx_data *rx) {
     PjSipEndpoint* endpoint = [PjSipEndpoint instance];
     
-    pjsip_msg msg = *rx->msg_info.msg;
     pj_str_t headerName;
     headerName = pj_str("P-Idt-WebRTC");
-    pjsip_generic_string_hdr *header = pjsip_msg_find_hdr_by_name(&msg, &headerName, nil);
+    pjsip_generic_string_hdr *header = pjsip_msg_find_hdr_by_name(rx->msg_info.msg, &headerName, nil);
     pj_str_t headerValue = header->hvalue;
     NSString *callSetupId = [PjSipUtil toString:&headerValue];
     
