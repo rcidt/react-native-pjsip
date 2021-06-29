@@ -94,7 +94,7 @@
                 cfg.reg_timeout = (unsigned) [self.regTimeout intValue];
             }
             
-            cfg.reg_timeout = 60;
+            cfg.reg_timeout = 310;
             cfg.reg_first_retry_interval = 3;
             cfg.reg_retry_interval = 10;
             cfg.reg_retry_random_interval = 7;
@@ -194,4 +194,5 @@
 }
 
 @end
+
 
