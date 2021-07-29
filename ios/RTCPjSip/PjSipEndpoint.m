@@ -123,7 +123,6 @@ void callback(int a, const char* b, int c) {
     pj_status_t status;
     
     NSString *publicAddress = config[@"service"][@"publicAddress"];
-    NSNumber *port = config[@"service"][@"port"];
     
     // Add UDP transport.
     {
@@ -131,14 +130,8 @@ void callback(int a, const char* b, int c) {
         pjsua_transport_config cfg;
         pjsua_transport_config_default(&cfg);
         pjsua_transport_id id;
-        
-        if (port) {
-            cfg.port = (int)port;
-        } else {
-            cfg.port = 6070;
-        }
-        
-        cfg.port_range = 20000;
+
+        cfg.port = 10000;
         
         if (publicAddress) {
             cfg.public_addr = pj_str((char*)[publicAddress UTF8String]);
