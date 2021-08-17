@@ -123,6 +123,7 @@ void callback(int a, const char* b, int c) {
     pj_status_t status;
     
     NSString *publicAddress = config[@"service"][@"publicAddress"];
+    NSNumber *port = config[@"service"][@"port"];
     
     // Add UDP transport.
     {
@@ -130,12 +131,14 @@ void callback(int a, const char* b, int c) {
         pjsua_transport_config cfg;
         pjsua_transport_config_default(&cfg);
         pjsua_transport_id id;
-
-        cfg.port = 10000;
         
-        if (publicAddress) {
-            cfg.public_addr = pj_str((char*)[publicAddress UTF8String]);
+        if (port) {
+            cfg.port = port;
+        } else {
+            cfg.port = 6070;
         }
+
+        cfg.port_range = 10000;
         
         // Add TCP transport.
         status = pjsua_transport_create(PJSIP_TRANSPORT_UDP, &cfg, &id);
@@ -153,9 +156,14 @@ void callback(int a, const char* b, int c) {
         pjsua_transport_config_default(&cfg);
         pjsua_transport_id id;
         
-        if (publicAddress) {
-            cfg.public_addr = pj_str((char*)[publicAddress UTF8String]);
+        if (port) {
+            cfg.port = port;
+        } else {
+            cfg.port = 6070;
         }
+
+        cfg.port_range = 10000;
+        
         status = pjsua_transport_create(PJSIP_TRANSPORT_TCP, &cfg, &id);
         
         
@@ -171,10 +179,14 @@ void callback(int a, const char* b, int c) {
         pjsua_transport_config cfg;
         pjsua_transport_config_default(&cfg);
         pjsua_transport_id id;
-
-        if (publicAddress) {
-            cfg.public_addr = pj_str((char*)[publicAddress UTF8String]);
+        
+        if (port) {
+            cfg.port = port;
+        } else {
+            cfg.port = 6070;
         }
+
+        cfg.port_range = 10000;
         
         status = pjsua_transport_create(PJSIP_TRANSPORT_TLS, &cfg, &id);
         
@@ -490,4 +502,5 @@ static void onCallTransferStatus(pjsua_call_id callId, int code, const pj_str_t*
 }
 
 @end
+
 
